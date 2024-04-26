@@ -1,16 +1,9 @@
 package br.com.alura.screenmatch;
 
-import br.com.alura.screenmatch.model.DadosEpisodio;
-import br.com.alura.screenmatch.model.DadosSerie;
-import br.com.alura.screenmatch.model.DadosTemporada;
-import br.com.alura.screenmatch.service.ConsumoAPI;
-import br.com.alura.screenmatch.service.ConverteDados;
+import br.com.alura.screenmatch.principal.Principal;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @SpringBootApplication
 public class ScreenmatchApplication implements CommandLineRunner {
@@ -21,22 +14,7 @@ public class ScreenmatchApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
-		var consumoAPI = new ConsumoAPI();
-		var json = consumoAPI.obterDados("http://www.omdbapi.com/?t=grey's+anatomy&apikey=97165191");
-		System.out.println(json);
-		var conversor = new ConverteDados();
-		DadosSerie dados = conversor.obterDados(json, DadosSerie.class);
-		System.out.println(dados);
-		json = consumoAPI.obterDados("https://www.omdbapi.com/?t=grey%27s+anatomy&Season=1&episode=1&apikey=97165191");
-		DadosEpisodio dadosEpisodio = conversor.obterDados(json, DadosEpisodio.class);
-		System.out.println(dadosEpisodio);
-		List<DadosTemporada> temporadas = new ArrayList<>();
-		for (int i = 1; i<=dados.totalTemporadas(); i++){
-			json = consumoAPI.obterDados("https://www.omdbapi.com/?t=grey%27s+anatomy&Season=" + i + "&apikey=97165191");
-			DadosTemporada dadosTemporada = conversor.obterDados(json, DadosTemporada.class);
-			temporadas.add(dadosTemporada);
-		}
-		temporadas.forEach(System.out::println);
-
+		var principal = new Principal();
+		principal.exibeMenu();
 	}
 }
