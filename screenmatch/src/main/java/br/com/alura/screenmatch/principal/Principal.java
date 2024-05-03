@@ -7,9 +7,6 @@ import br.com.alura.screenmatch.model.Episodio;
 import br.com.alura.screenmatch.service.ConsumoAPI;
 import br.com.alura.screenmatch.service.ConverteDados;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.sql.SQLOutput;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -91,10 +88,20 @@ public class Principal {
 //                        " Data lançamento: " + e.getDataLancamento().format(formatador)
 //                ));
 
-        Map<Integer, Double> avaliacoesPorTemporada = episodios.stream()
+//        Map<Integer, Double> avaliacoesPorTemporada = episodios.stream()
+//                .filter(e -> e.getAvaliacao() > 0.0)
+//                .collect(Collectors.groupingBy(Episodio::getTemporada,
+//                        Collectors.averagingDouble(Episodio::getAvaliacao)));
+//        System.out.println(avaliacoesPorTemporada);
+
+        DoubleSummaryStatistics est = episodios.stream()
                 .filter(e -> e.getAvaliacao() > 0.0)
-                .collect(Collectors.groupingBy(Episodio::getTemporada,
-                        Collectors.averagingDouble(Episodio::getAvaliacao)));
-        System.out.println(avaliacoesPorTemporada);
+                .collect(Collectors.summarizingDouble(Episodio::getAvaliacao));
+        System.out.println(
+        "Média: " +est.getAverage()
+        + "\nMelhor episódio: " + est.getMax()
+        + "\nPior episódio: " + est.getMin()
+        + "\nQuantidade: " + est.getCount()
+        );
     }
 }
